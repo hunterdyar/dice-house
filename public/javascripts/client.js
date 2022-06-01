@@ -75,6 +75,7 @@ function getFormDataFromField()
     let form = {}
     form['room'] = lobby;
     let sides= document.querySelector("#diceSidesSelectInput");
+    let dice = document.getElementById("numDiceInput").value;
 
     form['sides'] = sides.value;
     form['numDice'] = dice;
