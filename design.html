@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Dice house</title>
+    <link rel="stylesheet" href="public/stylesheets/cutestrap.css" />
+    <style>
+        .outOfText{
+            display: inline;
+            opacity: 40%;
+        }
+        .dice h3,h4,h5{
+            display: inline;
+        }
+    </style>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+        socket.on('connectToRoom',function(data){
+            setStatus(data);
+        });
+        function setStatus(status)
+        {
+            document.getElementById("status").innerText = status;
+        }
+        function inputName()
+        {
+            let room = document.getElementById("roomNameInput").value;
+            //if we use the URL and the time in seconds, in the salt, people can copy the code and it won't break
+            //"blooperDiceHouse_"
+            return room;
+        }
+        //Dice Things
+        function roll()
+        {
+            console.log("roll");
+            let numDice = document.getElementById("numDiceInput");
+            let sides = document.querySelector("#diceSidesSelectInput");
+
+            diceSet = rollNewDiceSet(numDice.value,sides.value);
+            for(var i = 0;i<connections.length;i++)
+            {
+                connections[i].send(diceSet);
+            }
+            showDice(diceSet);
+        }
+        function rollNewDiceSet(numDice,sides)
+        {
+            let diceSet = {};
+            diceSet['dice'] = [];
+            diceSet['total'] = 0;
+            for(let i = 0;i<numDice;i++)
+            {
+                let dice = {};
+                dice.sides = sides;
+                dice.val =  Math.floor( Math.random() * sides )+1;
+                diceSet['total']+=dice.val;
+                diceSet.dice.push(dice)
+            }
+
+            return diceSet;
+        }
+        function showDice(diceSet)
+        {
+            let container = document.getElementById("diceContainer");
+            container.innerHTML = "";
+            diceSet.dice.forEach(item => {
+                drawDice(item);
+            });
+            document.getElementById("diceTotal").innerText=diceSet['total'];
+
+        }
+        function drawDice(dice)
+        {
+            let container = document.getElementById("diceContainer");
+            container.innerHTML += "<div class=\"dice button\"><h3>"+dice.val+"</h3><p class='outOfText'>/"+dice.sides+"</p></div>";
+        }
+        function copyIDToClipboard()
+        {
+            navigator.clipboard.writeText(peer.id);
+            //Todo: Feedback that is has been copied.
+        }
+    </script>
+</head>
+<body>
+<section class="wrapper -thin">
+<section>
+    <h1 class="ta-center">Dice House</h1>
+    <hr />
+</section>
+<section>
+    <section class="grid">
+        <p id="status">Creating Room...</p>
+        <input type="submit" class="button" value="Copy" onclick="copyIDToClipboard()" />
+    </section>
+    <p class="ta-center">or</p>
+    <section class="grid">
+
+        <label class="field">
+            <input type="text" value="" id="roomNameInput"/>
+            <span class="label" >Room Name</span>
+        </label>
+        <input type="submit" class="button" value="Join" onclick="join()" />
+<!--        <input type="submit" class="button" value="Host" onclick="host()"/>-->
+
+    </section>
+    <hr />
+<section>
+    <section class="grid">
+        <label class="field">
+            <input id="numDiceInput" type="number" value="1"/>
+            <span class="label" >Number</span>
+        </label>
+        <label class="field">
+            <select id="diceSidesSelectInput">
+                <option value="4">d4</option>
+                <option value="6">d6</option>
+                <option value="8">d8</option>
+                <option value="10">d10</option>
+                <option value="12">d12</option>
+                <option value="20" selected="selected">d20</option>
+                <option value="100">d100</option>
+            </select>
+            <span class="label" for="select">Dice</span>
+        </label>
+        <input id="rollButton" type="submit" class="button" value="Roll" onclick="roll()"/>
+    </section>
+</section>
+    <hr />
+<section id="diceContainer" class="grid" style="--columns: 4">
+</section>
+    <section class="grid ta-center">
+        <h3 id="diceTotal"></h3>
+    </section>
+</section>
+</body>
+</html>

@@ -1,0 +1,40 @@
+extends layout
+
+block content
+  section(class='wrapper =thin')
+    section
+      h1(class='ta-center') Dice House
+      hr
+    section
+      section(class="grid")
+        p(id="status") Creating Room...
+        input(type="submit" class="button" value="Copy" onclick="copyIDToClipboard()")
+      p(class="ta-center") or
+      section(class='grid')
+        label(class='field')
+          input(type="text" value="" id="roomNameInput")
+          span(class="label") Room Name
+        input(type="submit" class="button" value="Join" onclick="join()")
+      hr
+    section
+      .grid
+        label(class='field')
+          input(type="number" value="1" id="numDiceInput" onchange="diceNumberChange()")
+          span(class="label") Number
+        label(class='field')
+          select(id="diceSidesSelectInput" onchange="diceSidesChange()")
+            option(value="4") 4
+            option(value="6") 6
+            option(value="8") 8
+            option(value="10") 10
+            option(value="12") 12
+            option(value="20" selected="selected") 20
+            option(value="100") 100
+          span(class="label" for="select") Dice
+        input(type="submit" class="button" value="Roll" onclick="roll()")
+    section(id="diceContainer" class='grid' style="--columns: 4")
+    section(class="grid ta-center")
+      h3(id="diceTotal")
+
+
+
