@@ -12,7 +12,7 @@ var usersRouter = require('./routes/users');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var PORT = process.env.PORT || 3000;
+var PORT = process.env.PORT || 12103;
 
 //Library Setup
 app.use('/static',express.static('node_modules)'));
@@ -28,6 +28,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/socket.io/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
