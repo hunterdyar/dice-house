@@ -12,6 +12,7 @@ var usersRouter = require('./routes/users');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var PORT = process.env.PORT || 3000;
 
 //Library Setup
 app.use('/static',express.static('node_modules)'));
@@ -34,6 +35,13 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
+//CORS
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -45,9 +53,6 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-
-
-
 
 //Whenever someone connects this gets executed
 io.on('connection', function(socket){
@@ -96,8 +101,8 @@ io.on('connection', function(socket){
   });
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+http.listen(PORT, function(){
+  console.log('listening on *:'+PORT);
 });
 
 //Lobby Name Things.
