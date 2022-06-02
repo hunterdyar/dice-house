@@ -1,6 +1,10 @@
 var lobby = "";
 var formData;
-var socket = io();//"ws://dice-house.herokuapp.com"
+var socket = io({
+    query: {
+        room: window.location.pathname.substring(1)//the path without the /
+    }
+});//"ws://dice-house.herokuapp.com"
 
 window.addEventListener('load',onLoad);
 
@@ -8,6 +12,9 @@ socket.on('connectToRoom',function(data){
     console.log("Connected to "+data);
     setStatus(data);
     lobby = data;
+    // history.pushState({room:lobby},lobby);
+    // window.location = lobby;//this causes a hilarious loop. Wait, i mean bad loop. a bad loop.
+    window.history.replaceState({room: lobby},lobby,lobby);
 });
 socket.on('otherRoll',function(diceSet){
     console.log("remote roll");

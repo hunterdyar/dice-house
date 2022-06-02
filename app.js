@@ -8,6 +8,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var roomRouter = require('./routes/room');
 
 var app = express();
 app.use(secure);//force https
@@ -28,9 +29,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-// app.use('/socket.io/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/',roomRouter);
+// app.use('/users', usersRouter);
+// app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -58,13 +59,18 @@ module.exports = app;
 
 //Whenever someone connects this gets executed
 io.on('connection', function(socket){
-  var roomName = newRandomLobbyName();
+  let q = socket.handshake.query;
+  let roomName = q.room;
+  if(roomName == "") {
+    roomName = newRandomLobbyName();
+  }
   socket.join(roomName);
   //Send this event to everyone in the room.
   io.sockets.in(roomName).emit('connectToRoom', roomName);
 
   io.of("/").adapter.on("delete-room", (room) => {
-    console.log(`room ${room} deleted`);
+    //todo: manage disconnects and discard things better.
+    // console.log(`room ${room} deleted`);
   });
   // //Whenever someone disconnects this piece of code executed
   // socket.on('disconnect', function () {
