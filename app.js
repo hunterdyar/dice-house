@@ -1,6 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
-
+var secure = require('express-force-https');
 
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+app.use(secure);//force https
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var PORT = process.env.PORT || 12103;

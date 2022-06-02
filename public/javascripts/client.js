@@ -5,6 +5,7 @@ var socket = io();//"ws://dice-house.herokuapp.com"
 window.addEventListener('load',onLoad);
 
 socket.on('connectToRoom',function(data){
+    console.log("Connected to "+data);
     setStatus(data);
     lobby = data;
 });
