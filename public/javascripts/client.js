@@ -1,6 +1,6 @@
 var lobby = "";
 var formData;
-var socket = io("ws://dice-house.herokuapp.com");
+var socket = io();//"ws://dice-house.herokuapp.com"
 
 window.addEventListener('load',onLoad);
 
