@@ -127,8 +127,8 @@ function newRandomLobbyName()
 }
 
 let nameOnes = ['banana' +
-'pancake','billy','dungeon','dragon','sword','jail','arrow','happy','quest','volcano','knife','ring','item']
-let nameTwos = ['adventure','hundred','great','simple','orange','green','red','yellow','blue','purple','chase','axe','magic','wizard']
+'pancake','billy','dungeon','dragon','sword','jail','arrow','happy','quest','volcano','knife','ring','item','journey','destiny','marathon','blizzard','storm','squire','blacksmith','dagger','dreams']
+let nameTwos = ['adventure','hundred','great','simple','orange','green','red','yellow','blue','purple','chase','axe','magic','wizard','ninja','tornado','light']
 
 function randomLobbyName()
 {
